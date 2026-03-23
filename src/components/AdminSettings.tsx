@@ -81,6 +81,75 @@ export default function AdminSettings({ settings }: { settings: Settings | null 
               </div>
               <p className="text-[10px] text-gray-400 font-mono mt-1 italic">Standard maintenance fee applied to every bill.</p>
             </div>
+
+            <div className="border-t border-[#141414] my-8 pt-8">
+              <h3 className="text-sm font-bold font-serif italic uppercase tracking-tight mb-4">Report Customization</h3>
+              
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] font-mono uppercase tracking-widest text-gray-500">Company Name</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Aquaflow Water District"
+                    value={formData.companyName || ''}
+                    onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                    className="w-full px-4 py-3 border border-[#141414] font-mono text-lg focus:ring-2 focus:ring-[#141414] outline-none"
+                  />
+                  <p className="text-[10px] text-gray-400 font-mono mt-1 italic">This name will appear on all reports and receipts.</p>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-mono uppercase tracking-widest text-gray-500">Tagline</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Pure Water, Pure Life"
+                    value={formData.tagline || ''}
+                    onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
+                    className="w-full px-4 py-3 border border-[#141414] font-mono text-lg focus:ring-2 focus:ring-[#141414] outline-none"
+                  />
+                  <p className="text-[10px] text-gray-400 font-mono mt-1 italic">A short slogan or motto for your company.</p>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-mono uppercase tracking-widest text-gray-500">Company Logo</label>
+                  <div className="space-y-3">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="https://example.com/logo.png"
+                        value={formData.companyLogo || ''}
+                        onChange={(e) => setFormData({ ...formData, companyLogo: e.target.value })}
+                        className="flex-1 px-4 py-3 border border-[#141414] font-mono text-sm focus:ring-2 focus:ring-[#141414] outline-none"
+                      />
+                      <label className="bg-[#141414] text-white px-4 py-3 font-bold uppercase tracking-widest text-[10px] cursor-pointer hover:bg-gray-800 transition-colors flex items-center">
+                        Upload
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                setFormData({ ...formData, companyLogo: reader.result as string });
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
+                    {formData.companyLogo && (
+                      <div className="p-4 border border-dashed border-[#141414] flex items-center justify-center bg-gray-50">
+                        <img src={formData.companyLogo} alt="Logo Preview" className="h-16 object-contain" referrerPolicy="no-referrer" />
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-[10px] text-gray-400 font-mono mt-1 italic">Direct link to your logo or upload a local file.</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="bg-blue-50 border border-blue-200 p-4 flex gap-3">

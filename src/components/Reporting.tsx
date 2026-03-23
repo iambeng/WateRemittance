@@ -1,13 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, deleteDoc, doc } from 'firebase/firestore';
 import { Member, Bill } from '../types';
-import { Download, Filter, Search, FileDown } from 'lucide-react';
+import { Download, Filter, Search, FileDown, Trash2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { format } from 'date-fns';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-export default function Reporting() {
+import { Settings } from '../types';
+
+const loadImage = (url: string): Promise<HTMLImageElement> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = (e) => reject(e);
+    img.src = url;
+  });
+};
+
+export default function Reporting({ settings, isAdmin }: { settings: Settings | null, isAdmin: boolean }) {
   const [members, setMembers] = useState<Member[]>([]);
   const [bills, setBills] = useState<Bill[]>([]);
   const [filters, setFilters] = useState({
@@ -16,6 +29,7 @@ export default function Reporting() {
     lateral: ''
   });
   const [selectedBills, setSelectedBills] = useState<string[]>([]);
+  const [confirmDelete, setConfirmDelete] = useState<{ id: string | 'bulk', isOpen: boolean }>({ id: '', isOpen: false });
 
   useEffect(() => {
     const unsubMembers = onSnapshot(collection(db, 'members'), (snapshot) => {
@@ -51,11 +65,42 @@ export default function Reporting() {
     );
   };
 
-  const generatePDF = () => {
+  const handleDeleteBills = async () => {
+    if (selectedBills.length === 0) return;
+    
+    try {
+      await Promise.all(selectedBills.map(id => deleteDoc(doc(db, 'bills', id))));
+      setSelectedBills([]);
+      setConfirmDelete({ id: '', isOpen: false });
+    } catch (error) {
+      console.error("Error deleting bills:", error);
+    }
+  };
+
+  const handleDeleteSingle = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, 'bills', id));
+      setSelectedBills(prev => prev.filter(i => i !== id));
+      setConfirmDelete({ id: '', isOpen: false });
+    } catch (error) {
+      console.error("Error deleting bill:", error);
+    }
+  };
+
+  const generatePDF = async () => {
     const doc = new jsPDF('p', 'mm', 'a4');
     const billsToPrint = bills.filter(b => selectedBills.includes(b.id));
     
     if (billsToPrint.length === 0) return;
+
+    let logoImg: HTMLImageElement | null = null;
+    if (settings?.companyLogo) {
+      try {
+        logoImg = await loadImage(settings.companyLogo);
+      } catch (e) {
+        console.error("Failed to load logo", e);
+      }
+    }
 
     const receiptWidth = 90;
     const receiptHeight = 130;
@@ -79,21 +124,47 @@ export default function Reporting() {
       doc.rect(x, y, receiptWidth, receiptHeight);
 
       // Header
+      let currentY = y + 8;
+
+      if (logoImg) {
+        const logoSize = 10;
+        doc.addImage(logoImg, 'PNG', x + (receiptWidth / 2) - (logoSize / 2), currentY - 4, logoSize, logoSize);
+        currentY += 10;
+      }
+
+      const companyName = settings?.companyName?.toUpperCase() || 'AQUAFLOW';
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.text('AQUAFLOW', x + receiptWidth / 2, y + 10, { align: 'center' });
+      
+      // Dynamic font size for company name to prevent overlap
+      let nameFontSize = 14;
+      if (companyName.length > 20) nameFontSize = 11;
+      if (companyName.length > 30) nameFontSize = 9;
+      
+      doc.setFontSize(nameFontSize);
+      doc.text(companyName, x + receiptWidth / 2, currentY, { align: 'center' });
+      
+      currentY += 4;
+      if (settings?.tagline) {
+        doc.setFontSize(6);
+        doc.setFont('helvetica', 'italic');
+        doc.text(settings.tagline, x + receiptWidth / 2, currentY, { align: 'center' });
+        currentY += 4;
+      } else {
+        currentY += 1;
+      }
+
       doc.setFontSize(8);
       doc.setFont('helvetica', 'normal');
-      doc.text('WATER BILL RECEIPT', x + receiptWidth / 2, y + 15, { align: 'center' });
+      doc.text('WATER INVOICE', x + receiptWidth / 2, currentY, { align: 'center' });
 
       // Member Info
       doc.setFontSize(7);
-      doc.text(`ID: ${bill.memberId}`, x + 5, y + 25);
-      doc.text(`Lateral: ${member?.lateralNumber || 'N/A'}`, x + 5, y + 30);
+      doc.text(`ID: ${bill.memberId}`, x + 5, y + 27);
+      doc.text(`Lateral: ${member?.lateralNumber || 'N/A'}`, x + 5, y + 31);
       doc.setFont('helvetica', 'bold');
-      doc.text(`NAME: ${member?.name || 'Unknown'}`, x + 5, y + 35);
+      doc.text(`NAME: ${member?.name || 'Unknown'}`, x + 5, y + 36);
       doc.setFont('helvetica', 'normal');
-      doc.text(`Address: ${member?.address || 'N/A'}`, x + 5, y + 40, { maxWidth: 80 });
+      doc.text(`Address: ${member?.address || 'N/A'}`, x + 5, y + 41, { maxWidth: 80 });
 
       // Billing Details
       doc.line(x + 5, y + 45, x + receiptWidth - 5, y + 45);
@@ -137,11 +208,43 @@ export default function Reporting() {
       doc.text(`Generated: ${format(new Date(), 'yyyy-MM-dd HH:mm')}`, x + 5, y + 125);
     });
 
-    doc.save(`Water_Bills_${filters.month}_${filters.year}.pdf`);
+    doc.save(`Water_Invoices_${filters.month}_${filters.year}.pdf`);
   };
 
   return (
     <div className="space-y-6">
+      <AnimatePresence>
+        {confirmDelete.isOpen && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white border-2 border-[#141414] shadow-[12px_12px_0px_0px_rgba(20,20,20,1)] w-full max-w-sm p-8"
+            >
+              <h3 className="text-xl font-bold font-serif italic uppercase mb-4">Confirm Delete</h3>
+              <p className="text-sm font-mono text-gray-600 mb-8">
+                Are you sure you want to delete {confirmDelete.id === 'bulk' ? `${selectedBills.length} selected records` : 'this record'}? This action cannot be undone.
+              </p>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setConfirmDelete({ id: '', isOpen: false })}
+                  className="flex-1 border border-[#141414] py-2 font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => confirmDelete.id === 'bulk' ? handleDeleteBills() : handleDeleteSingle(confirmDelete.id)}
+                  className="flex-1 bg-red-600 text-white py-2 font-bold uppercase tracking-widest hover:bg-red-700 transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       <div className="bg-white border border-[#141414] p-6 shadow-[8px_8px_0px_0px_rgba(20,20,20,1)]">
         <div className="flex flex-wrap gap-4 items-end">
           <div className="space-y-1">
@@ -192,6 +295,15 @@ export default function Reporting() {
             <FileDown size={18} />
             Export PDF ({selectedBills.length})
           </button>
+          {isAdmin && selectedBills.length > 0 && (
+            <button
+              onClick={() => setConfirmDelete({ id: 'bulk', isOpen: true })}
+              className="flex items-center gap-2 bg-red-600 text-white px-6 py-2 font-bold uppercase tracking-widest hover:bg-red-700 transition-colors"
+            >
+              <Trash2 size={18} />
+              Delete Selected ({selectedBills.length})
+            </button>
+          )}
         </div>
       </div>
 
@@ -216,6 +328,7 @@ export default function Reporting() {
                 <th className="p-4 font-serif italic text-xs uppercase tracking-wider opacity-50">Amount</th>
                 <th className="p-4 font-serif italic text-xs uppercase tracking-wider opacity-50">Payment</th>
                 <th className="p-4 font-serif italic text-xs uppercase tracking-wider opacity-50">Date</th>
+                {isAdmin && <th className="p-4 font-serif italic text-xs uppercase tracking-wider opacity-50">Actions</th>}
               </tr>
             </thead>
             <tbody className="divide-y divide-[#141414]">
@@ -247,6 +360,17 @@ export default function Reporting() {
                     <td className="p-4 text-xs font-mono text-gray-500">
                       {format(new Date(bill.readingDateEnd), 'MMM d, yyyy')}
                     </td>
+                    {isAdmin && (
+                      <td className="p-4">
+                        <button
+                          onClick={() => setConfirmDelete({ id: bill.id, isOpen: true })}
+                          className="text-red-600 hover:text-red-800 transition-colors p-2"
+                          title="Delete Record"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 );
               })}

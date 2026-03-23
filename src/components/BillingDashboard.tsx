@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, onSnapshot, addDoc, query, orderBy, where, doc, updateDoc } from 'firebase/firestore';
+import { collection, onSnapshot, addDoc, query, orderBy, where, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { Member, Bill, Settings } from '../types';
-import { Calculator, History, Plus, X, Receipt, ArrowRight, UserPlus } from 'lucide-react';
+import { Calculator, History, Plus, X, Receipt, ArrowRight, UserPlus, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { format, isAfter, getDate } from 'date-fns';
 
@@ -11,6 +11,8 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
   const [bills, setBills] = useState<Bill[]>([]);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBills, setSelectedBills] = useState<string[]>([]);
+  const [confirmDelete, setConfirmDelete] = useState<{ id: string | 'bulk', isOpen: boolean }>({ id: '', isOpen: false });
   
   const [formData, setFormData] = useState({
     readingDateStart: format(new Date(), 'yyyy-MM-dd'),
@@ -120,6 +122,34 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
     }
   };
 
+  const handleDeleteBill = async (billId: string) => {
+    try {
+      await deleteDoc(doc(db, 'bills', billId));
+      setSelectedBills(prev => prev.filter(id => id !== billId));
+      setConfirmDelete({ id: '', isOpen: false });
+    } catch (error) {
+      console.error("Error deleting bill:", error);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedBills.length === 0) return;
+    
+    try {
+      await Promise.all(selectedBills.map(id => deleteDoc(doc(db, 'bills', id))));
+      setSelectedBills([]);
+      setConfirmDelete({ id: '', isOpen: false });
+    } catch (error) {
+      console.error("Error deleting bills:", error);
+    }
+  };
+
+  const toggleSelectBill = (billId: string) => {
+    setSelectedBills(prev => 
+      prev.includes(billId) ? prev.filter(id => id !== billId) : [...prev, billId]
+    );
+  };
+
   const memberBills = bills.filter(b => b.memberId === selectedMember?.memberId);
 
   return (
@@ -195,16 +225,37 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <History size={20} />
-                <h3 className="text-lg font-bold font-serif italic uppercase tracking-tight">Billing History</h3>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <History size={20} />
+                  <h3 className="text-lg font-bold font-serif italic uppercase tracking-tight">Billing History</h3>
+                </div>
+                {isAdmin && selectedBills.length > 0 && (
+                  <button
+                    onClick={() => setConfirmDelete({ id: 'bulk', isOpen: true })}
+                    className="flex items-center gap-2 bg-red-600 text-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest hover:bg-red-700 transition-colors"
+                  >
+                    <Trash2 size={14} />
+                    Delete Selected ({selectedBills.length})
+                  </button>
+                )}
               </div>
               
               <div className="space-y-4">
                 {memberBills.length > 0 ? (
                   memberBills.map(bill => (
-                    <div key={bill.id} className="bg-white border border-[#141414] p-4 flex flex-col md:flex-row justify-between gap-4">
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 flex-1">
+                    <div key={bill.id} className="bg-white border border-[#141414] p-4 flex flex-col md:flex-row justify-between gap-4 relative group">
+                      {isAdmin && (
+                        <div className="absolute left-4 top-4 md:static">
+                          <input 
+                            type="checkbox"
+                            checked={selectedBills.includes(bill.id)}
+                            onChange={() => toggleSelectBill(bill.id)}
+                            className="w-4 h-4 accent-[#141414]"
+                          />
+                        </div>
+                      )}
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 flex-1">
                       <div>
                         <p className="text-[10px] font-mono uppercase text-gray-500">Period</p>
                         <p className="text-xs font-bold">{format(new Date(bill.readingDateStart), 'MMM d')} - {format(new Date(bill.readingDateEnd), 'MMM d, yyyy')}</p>
@@ -237,6 +288,15 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
                               Mark as Paid
                             </button>
                           )}
+                          {isAdmin && (
+                            <button
+                              onClick={() => setConfirmDelete({ id: bill.id, isOpen: true })}
+                              className="text-red-600 hover:text-red-800 transition-colors"
+                              title="Delete Bill"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -263,6 +323,36 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
 
       {/* Reading Modal */}
       <AnimatePresence>
+        {confirmDelete.isOpen && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white border-2 border-[#141414] shadow-[12px_12px_0px_0px_rgba(20,20,20,1)] w-full max-w-sm p-8"
+            >
+              <h3 className="text-xl font-bold font-serif italic uppercase mb-4">Confirm Delete</h3>
+              <p className="text-sm font-mono text-gray-600 mb-8">
+                Are you sure you want to delete {confirmDelete.id === 'bulk' ? `${selectedBills.length} selected records` : 'this record'}? This action cannot be undone.
+              </p>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setConfirmDelete({ id: '', isOpen: false })}
+                  className="flex-1 border border-[#141414] py-2 font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => confirmDelete.id === 'bulk' ? handleBulkDelete() : handleDeleteBill(confirmDelete.id)}
+                  className="flex-1 bg-red-600 text-white py-2 font-bold uppercase tracking-widest hover:bg-red-700 transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
             <motion.div

@@ -30,4 +30,7 @@ export interface Settings {
   excessRate: number;
   baseRate: number;
   fixedDues: number;
+  companyName?: string;
+  companyLogo?: string;
+  tagline?: string;
 }

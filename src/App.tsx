@@ -93,11 +93,22 @@ export default function App() {
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#E4E3E0] p-4">
-        <div className="max-w-md w-full bg-white border border-[#141414] p-8 shadow-[8px_8px_0px_0px_rgba(20,20,20,1)]">
+          <div className="max-w-md w-full bg-white border border-[#141414] p-8 shadow-[8px_8px_0px_0px_rgba(20,20,20,1)]">
           <div className="flex items-center gap-3 mb-6">
-            <Droplets className="w-10 h-10 text-[#141414]" />
-            <h1 className="text-3xl font-bold tracking-tighter uppercase italic font-serif">Aquaflow</h1>
+            {settings?.companyLogo ? (
+              <img src={settings.companyLogo} alt="Logo" className="w-10 h-10 object-contain" referrerPolicy="no-referrer" />
+            ) : (
+              <Droplets className="w-10 h-10 text-[#141414]" />
+            )}
+            <h1 className="text-3xl font-bold tracking-tighter uppercase italic font-serif">
+              {settings?.companyName || 'Aquaflow'}
+            </h1>
           </div>
+          {settings?.tagline && (
+            <p className="text-xs font-serif italic text-gray-500 -mt-4 mb-6">
+              {settings.tagline}
+            </p>
+          )}
           <p className="text-sm text-gray-600 mb-8 font-mono">
             Secure water management system. Please sign in to access the dashboard.
           </p>
@@ -126,8 +137,21 @@ export default function App() {
         <div className="p-6 flex items-center justify-between">
           {isSidebarOpen && (
             <div className="flex items-center gap-2">
-              <Droplets className="w-6 h-6 text-white" />
-              <span className="font-serif italic font-bold text-xl">Aquaflow</span>
+              {settings?.companyLogo ? (
+                <img src={settings.companyLogo} alt="Logo" className="w-6 h-6 object-contain" referrerPolicy="no-referrer" />
+              ) : (
+                <Droplets className="w-6 h-6 text-white" />
+              )}
+              <div className="flex flex-col">
+                <span className="font-serif italic font-bold text-xl truncate max-w-[160px]">
+                  {settings?.companyName || 'Aquaflow'}
+                </span>
+                {settings?.tagline && (
+                  <span className="text-[8px] font-serif italic text-gray-400 truncate max-w-[160px] -mt-1">
+                    {settings.tagline}
+                  </span>
+                )}
+              </div>
             </div>
           )}
           <button 
@@ -216,7 +240,7 @@ export default function App() {
               {activeTab === 'members' && <MemberManagement isAdmin={isAdmin} />}
               {activeTab === 'billing' && <BillingDashboard isAdmin={isAdmin} settings={settings} />}
               {activeTab === 'settings' && isAdmin && <AdminSettings settings={settings} />}
-              {activeTab === 'reports' && <Reporting />}
+              {activeTab === 'reports' && <Reporting settings={settings} isAdmin={isAdmin} />}
             </motion.div>
           </AnimatePresence>
         </div>
