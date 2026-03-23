@@ -220,7 +220,7 @@ export default function Reporting({ settings, isAdmin }: { settings: Settings | 
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white border-2 border-[#141414] shadow-[12px_12px_0px_0px_rgba(20,20,20,1)] w-full max-w-sm p-8"
+              className="bg-white border-2 border-[#115E59] shadow-[12px_12px_0px_0px_rgba(17,94,89,1)] w-full max-w-sm p-8"
             >
               <h3 className="text-xl font-bold font-serif italic uppercase mb-4">Confirm Delete</h3>
               <p className="text-sm font-mono text-gray-600 mb-8">
@@ -229,7 +229,7 @@ export default function Reporting({ settings, isAdmin }: { settings: Settings | 
               <div className="flex gap-4">
                 <button
                   onClick={() => setConfirmDelete({ id: '', isOpen: false })}
-                  className="flex-1 border border-[#141414] py-2 font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors"
+                  className="flex-1 border border-[#115E59] py-2 font-bold uppercase tracking-widest hover:bg-teal-50 transition-colors text-[#115E59]"
                 >
                   Cancel
                 </button>
@@ -245,14 +245,14 @@ export default function Reporting({ settings, isAdmin }: { settings: Settings | 
         )}
       </AnimatePresence>
 
-      <div className="bg-white border border-[#141414] p-6 shadow-[8px_8px_0px_0px_rgba(20,20,20,1)]">
+      <div className="bg-white border border-[#115E59] p-6 shadow-[8px_8px_0px_0px_rgba(17,94,89,1)]">
         <div className="flex flex-wrap gap-4 items-end">
           <div className="space-y-1">
             <label className="text-[10px] font-mono uppercase tracking-widest text-gray-500">Month</label>
             <select 
               value={filters.month}
               onChange={(e) => setFilters({ ...filters, month: e.target.value })}
-              className="p-2 border border-[#141414] font-mono text-sm outline-none bg-white"
+              className="p-2 border border-[#115E59] font-mono text-sm outline-none bg-white"
             >
               {Array.from({ length: 12 }, (_, i) => {
                 const m = (i + 1).toString().padStart(2, '0');
@@ -265,7 +265,7 @@ export default function Reporting({ settings, isAdmin }: { settings: Settings | 
             <select 
               value={filters.year}
               onChange={(e) => setFilters({ ...filters, year: e.target.value })}
-              className="p-2 border border-[#141414] font-mono text-sm outline-none bg-white"
+              className="p-2 border border-[#115E59] font-mono text-sm outline-none bg-white"
             >
               {['2024', '2025', '2026'].map(y => <option key={y} value={y}>{y}</option>)}
             </select>
@@ -275,7 +275,7 @@ export default function Reporting({ settings, isAdmin }: { settings: Settings | 
             <select 
               value={filters.lateral}
               onChange={(e) => setFilters({ ...filters, lateral: e.target.value })}
-              className="p-2 border border-[#141414] font-mono text-sm outline-none bg-white"
+              className="p-2 border border-[#115E59] font-mono text-sm outline-none bg-white"
             >
               <option value="">All Laterals</option>
               <option value="Mainline">Mainline</option>
@@ -290,7 +290,7 @@ export default function Reporting({ settings, isAdmin }: { settings: Settings | 
           <button
             onClick={generatePDF}
             disabled={selectedBills.length === 0}
-            className="flex items-center gap-2 bg-[#141414] text-white px-6 py-2 font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 bg-[#115E59] text-white px-6 py-2 font-bold uppercase tracking-widest hover:bg-[#0D9488] transition-colors disabled:opacity-50"
           >
             <FileDown size={18} />
             Export PDF ({selectedBills.length})
@@ -307,11 +307,11 @@ export default function Reporting({ settings, isAdmin }: { settings: Settings | 
         </div>
       </div>
 
-      <div className="bg-white border border-[#141414] shadow-[8px_8px_0px_0px_rgba(20,20,20,1)] overflow-hidden">
+      <div className="bg-white border border-[#115E59] shadow-[8px_8px_0px_0px_rgba(17,94,89,1)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-bottom border-[#141414] bg-gray-50">
+              <tr className="border-bottom border-[#115E59] bg-teal-50">
                 <th className="p-4 w-10">
                   <input 
                     type="checkbox" 
@@ -331,11 +331,11 @@ export default function Reporting({ settings, isAdmin }: { settings: Settings | 
                 {isAdmin && <th className="p-4 font-serif italic text-xs uppercase tracking-wider opacity-50">Actions</th>}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#141414]">
+            <tbody className="divide-y divide-[#115E59]">
               {filteredBills.map((bill) => {
                 const member = members.find(m => m.memberId === bill.memberId);
                 return (
-                  <tr key={bill.id} className="hover:bg-gray-50 transition-colors group">
+                  <tr key={bill.id} className="hover:bg-teal-50 transition-colors group">
                     <td className="p-4">
                       <input 
                         type="checkbox" 

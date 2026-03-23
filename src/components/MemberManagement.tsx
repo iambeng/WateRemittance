@@ -118,7 +118,7 @@ export default function MemberManagement({ isAdmin }: { isAdmin: boolean }) {
             placeholder="Search by ID or Name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-white border border-[#141414] font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#141414]"
+            className="w-full pl-10 pr-4 py-2 bg-white border border-[#115E59] font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#115E59]"
           />
         </div>
         {isAdmin && (
@@ -128,7 +128,7 @@ export default function MemberManagement({ isAdmin }: { isAdmin: boolean }) {
               setFormData({ memberId: '', name: '', address: '', lateralNumber: '', status: 'Active' });
               setIsModalOpen(true);
             }}
-            className="flex items-center gap-2 bg-[#141414] text-white px-6 py-2 font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
+            className="flex items-center gap-2 bg-[#115E59] text-white px-6 py-2 font-bold uppercase tracking-widest hover:bg-teal-800 transition-colors"
           >
             <UserPlus size={18} />
             Add Member
@@ -136,11 +136,11 @@ export default function MemberManagement({ isAdmin }: { isAdmin: boolean }) {
         )}
       </div>
 
-      <div className="bg-white border border-[#141414] shadow-[8px_8px_0px_0px_rgba(20,20,20,1)] overflow-hidden">
+      <div className="bg-white border border-[#115E59] shadow-[8px_8px_0px_0px_rgba(17,94,89,1)] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-bottom border-[#141414] bg-gray-50">
+              <tr className="border-bottom border-[#115E59] bg-gray-50">
                 <th className="p-4 font-serif italic text-xs uppercase tracking-wider opacity-50">ID</th>
                 <th className="p-4 font-serif italic text-xs uppercase tracking-wider opacity-50">Name</th>
                 <th className="p-4 font-serif italic text-xs uppercase tracking-wider opacity-50">Address</th>
@@ -149,7 +149,7 @@ export default function MemberManagement({ isAdmin }: { isAdmin: boolean }) {
                 {isAdmin && <th className="p-4 font-serif italic text-xs uppercase tracking-wider opacity-50">Actions</th>}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#141414]">
+            <tbody className="divide-y divide-[#115E59]">
               {filteredMembers.map((member) => (
                 <tr key={member.id} className="hover:bg-gray-50 transition-colors group">
                   <td className="p-4 font-mono text-sm font-bold">{member.memberId}</td>
@@ -170,7 +170,7 @@ export default function MemberManagement({ isAdmin }: { isAdmin: boolean }) {
                       <div className="flex gap-2">
                         <button 
                           onClick={() => handleEdit(member)}
-                          className="p-1 hover:bg-[#141414] hover:text-white border border-transparent hover:border-[#141414] transition-all"
+                          className="p-1 hover:bg-[#115E59] hover:text-white border border-transparent hover:border-[#115E59] transition-all"
                         >
                           <Edit2 size={16} />
                         </button>
@@ -198,7 +198,7 @@ export default function MemberManagement({ isAdmin }: { isAdmin: boolean }) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white border-2 border-[#141414] shadow-[12px_12px_0px_0px_rgba(20,20,20,1)] w-full max-w-lg p-8"
+              className="bg-white border-2 border-[#115E59] shadow-[12px_12px_0px_0px_rgba(17,94,89,1)] w-full max-w-lg p-8"
             >
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-bold font-serif italic uppercase tracking-tight">
@@ -218,7 +218,7 @@ export default function MemberManagement({ isAdmin }: { isAdmin: boolean }) {
                       type="text"
                       placeholder="Auto-generated"
                       value={editingMember ? formData.memberId : ''}
-                      className="w-full p-2 border border-[#141414] font-mono text-sm bg-gray-50 text-gray-400 cursor-not-allowed outline-none"
+                      className="w-full p-2 border border-[#115E59] font-mono text-sm bg-gray-50 text-gray-400 cursor-not-allowed outline-none"
                     />
                   </div>
                   <div className="space-y-1">
@@ -227,7 +227,7 @@ export default function MemberManagement({ isAdmin }: { isAdmin: boolean }) {
                       required
                       value={formData.lateralNumber}
                       onChange={(e) => setFormData({ ...formData, lateralNumber: e.target.value })}
-                      className="w-full p-2 border border-[#141414] font-mono text-sm focus:ring-2 focus:ring-[#141414] outline-none appearance-none bg-white"
+                      className="w-full p-2 border border-[#115E59] font-mono text-sm focus:ring-2 focus:ring-[#115E59] outline-none appearance-none bg-white"
                     >
                       <option value="">Select Lateral</option>
                       <option value="Mainline">Mainline</option>
@@ -248,7 +248,7 @@ export default function MemberManagement({ isAdmin }: { isAdmin: boolean }) {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full p-2 border border-[#141414] font-mono text-sm focus:ring-2 focus:ring-[#141414] outline-none"
+                    className="w-full p-2 border border-[#115E59] font-mono text-sm focus:ring-2 focus:ring-[#115E59] outline-none"
                   />
                 </div>
 
@@ -258,7 +258,7 @@ export default function MemberManagement({ isAdmin }: { isAdmin: boolean }) {
                     required
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className="w-full p-2 border border-[#141414] font-mono text-sm focus:ring-2 focus:ring-[#141414] outline-none h-24"
+                    className="w-full p-2 border border-[#115E59] font-mono text-sm focus:ring-2 focus:ring-[#115E59] outline-none h-24"
                   />
                 </div>
 
@@ -267,7 +267,7 @@ export default function MemberManagement({ isAdmin }: { isAdmin: boolean }) {
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value as 'Active' | 'Padlocked' })}
-                    className="w-full p-2 border border-[#141414] font-mono text-sm focus:ring-2 focus:ring-[#141414] outline-none appearance-none bg-white"
+                    className="w-full p-2 border border-[#115E59] font-mono text-sm focus:ring-2 focus:ring-[#115E59] outline-none appearance-none bg-white"
                   >
                     <option value="Active">Active</option>
                     <option value="Padlocked">Padlocked</option>
@@ -276,7 +276,7 @@ export default function MemberManagement({ isAdmin }: { isAdmin: boolean }) {
 
                 <button
                   type="submit"
-                  className="w-full bg-[#141414] text-white py-3 font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors mt-6"
+                  className="w-full bg-[#115E59] text-white py-3 font-bold uppercase tracking-widest hover:bg-teal-800 transition-colors mt-6"
                 >
                   {editingMember ? 'Update Profile' : 'Register Member'}
                 </button>

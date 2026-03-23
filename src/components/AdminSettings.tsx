@@ -27,9 +27,9 @@ export default function AdminSettings({ settings }: { settings: Settings | null 
 
   return (
     <div className="max-w-2xl">
-      <div className="bg-white border border-[#141414] p-8 shadow-[8px_8px_0px_0px_rgba(20,20,20,1)]">
+      <div className="bg-white border border-[#115E59] p-8 shadow-[8px_8px_0px_0px_rgba(17,94,89,1)]">
         <div className="flex items-center gap-3 mb-8">
-          <div className="bg-[#141414] p-2 text-white">
+          <div className="bg-[#115E59] p-2 text-white">
             <Save size={24} />
           </div>
           <h2 className="text-2xl font-bold font-serif italic uppercase tracking-tight">Billing Configuration</h2>
@@ -46,7 +46,7 @@ export default function AdminSettings({ settings }: { settings: Settings | null 
                   type="number"
                   value={isNaN(formData.baseRate) ? '' : formData.baseRate}
                   onChange={(e) => setFormData({ ...formData, baseRate: e.target.value === '' ? NaN : parseFloat(e.target.value) })}
-                  className="w-full pl-8 pr-4 py-3 border border-[#141414] font-mono text-lg focus:ring-2 focus:ring-[#141414] outline-none"
+                  className="w-full pl-8 pr-4 py-3 border border-[#115E59] font-mono text-lg focus:ring-2 focus:ring-[#115E59] outline-none"
                 />
               </div>
               <p className="text-[10px] text-gray-400 font-mono mt-1 italic">Minimum charge applied to consumption up to 3 cubic meters.</p>
@@ -61,7 +61,7 @@ export default function AdminSettings({ settings }: { settings: Settings | null 
                   type="number"
                   value={isNaN(formData.excessRate) ? '' : formData.excessRate}
                   onChange={(e) => setFormData({ ...formData, excessRate: e.target.value === '' ? NaN : parseFloat(e.target.value) })}
-                  className="w-full pl-8 pr-4 py-3 border border-[#141414] font-mono text-lg focus:ring-2 focus:ring-[#141414] outline-none"
+                  className="w-full pl-8 pr-4 py-3 border border-[#115E59] font-mono text-lg focus:ring-2 focus:ring-[#115E59] outline-none"
                 />
               </div>
               <p className="text-[10px] text-gray-400 font-mono mt-1 italic">Charge for every cubic meter consumed beyond the initial 3m³.</p>
@@ -76,13 +76,13 @@ export default function AdminSettings({ settings }: { settings: Settings | null 
                   type="number"
                   value={isNaN(formData.fixedDues) ? '' : formData.fixedDues}
                   onChange={(e) => setFormData({ ...formData, fixedDues: e.target.value === '' ? NaN : parseFloat(e.target.value) })}
-                  className="w-full pl-8 pr-4 py-3 border border-[#141414] font-mono text-lg focus:ring-2 focus:ring-[#141414] outline-none"
+                  className="w-full pl-8 pr-4 py-3 border border-[#115E59] font-mono text-lg focus:ring-2 focus:ring-[#115E59] outline-none"
                 />
               </div>
               <p className="text-[10px] text-gray-400 font-mono mt-1 italic">Standard maintenance fee applied to every bill.</p>
             </div>
 
-            <div className="border-t border-[#141414] my-8 pt-8">
+            <div className="border-t border-[#115E59] my-8 pt-8">
               <h3 className="text-sm font-bold font-serif italic uppercase tracking-tight mb-4">Report Customization</h3>
               
               <div className="space-y-4">
@@ -93,7 +93,7 @@ export default function AdminSettings({ settings }: { settings: Settings | null 
                     placeholder="e.g. Aquaflow Water District"
                     value={formData.companyName || ''}
                     onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                    className="w-full px-4 py-3 border border-[#141414] font-mono text-lg focus:ring-2 focus:ring-[#141414] outline-none"
+                    className="w-full px-4 py-3 border border-[#115E59] font-mono text-lg focus:ring-2 focus:ring-[#115E59] outline-none"
                   />
                   <p className="text-[10px] text-gray-400 font-mono mt-1 italic">This name will appear on all reports and receipts.</p>
                 </div>
@@ -105,7 +105,7 @@ export default function AdminSettings({ settings }: { settings: Settings | null 
                     placeholder="e.g. Pure Water, Pure Life"
                     value={formData.tagline || ''}
                     onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
-                    className="w-full px-4 py-3 border border-[#141414] font-mono text-lg focus:ring-2 focus:ring-[#141414] outline-none"
+                    className="w-full px-4 py-3 border border-[#115E59] font-mono text-lg focus:ring-2 focus:ring-[#115E59] outline-none"
                   />
                   <p className="text-[10px] text-gray-400 font-mono mt-1 italic">A short slogan or motto for your company.</p>
                 </div>
@@ -119,9 +119,9 @@ export default function AdminSettings({ settings }: { settings: Settings | null 
                         placeholder="https://example.com/logo.png"
                         value={formData.companyLogo || ''}
                         onChange={(e) => setFormData({ ...formData, companyLogo: e.target.value })}
-                        className="flex-1 px-4 py-3 border border-[#141414] font-mono text-sm focus:ring-2 focus:ring-[#141414] outline-none"
+                        className="flex-1 px-4 py-3 border border-[#115E59] font-mono text-sm focus:ring-2 focus:ring-[#115E59] outline-none"
                       />
-                      <label className="bg-[#141414] text-white px-4 py-3 font-bold uppercase tracking-widest text-[10px] cursor-pointer hover:bg-gray-800 transition-colors flex items-center">
+                      <label className="bg-[#115E59] text-white px-4 py-3 font-bold uppercase tracking-widest text-[10px] cursor-pointer hover:bg-teal-800 transition-colors flex items-center">
                         Upload
                         <input
                           type="file"
@@ -141,7 +141,7 @@ export default function AdminSettings({ settings }: { settings: Settings | null 
                       </label>
                     </div>
                     {formData.companyLogo && (
-                      <div className="p-4 border border-dashed border-[#141414] flex items-center justify-center bg-gray-50">
+                      <div className="p-4 border border-dashed border-[#115E59] flex items-center justify-center bg-gray-50">
                         <img src={formData.companyLogo} alt="Logo Preview" className="h-16 object-contain" referrerPolicy="no-referrer" />
                       </div>
                     )}
@@ -163,7 +163,7 @@ export default function AdminSettings({ settings }: { settings: Settings | null 
           <button
             type="submit"
             disabled={saving}
-            className="w-full bg-[#141414] text-white py-4 font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors disabled:opacity-50"
+            className="w-full bg-[#115E59] text-white py-4 font-bold uppercase tracking-widest hover:bg-teal-800 transition-colors disabled:opacity-50"
           >
             {saving ? 'Saving Changes...' : 'Save Configuration'}
           </button>

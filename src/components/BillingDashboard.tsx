@@ -157,13 +157,13 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
       {/* Member List for Selection */}
       <div className="lg:col-span-1 space-y-4">
         <h3 className="text-lg font-bold font-serif italic uppercase tracking-tight">Select Member</h3>
-        <div className="bg-white border border-[#141414] shadow-[4px_4px_0px_0px_rgba(20,20,20,1)] max-h-[600px] overflow-y-auto">
+        <div className="bg-white border border-[#115E59] shadow-[4px_4px_0px_0px_rgba(17,94,89,1)] max-h-[600px] overflow-y-auto">
           {members.map(member => (
             <button
               key={member.id}
               onClick={() => setSelectedMember(member)}
-              className={`w-full p-4 text-left border-b border-[#141414] last:border-0 transition-colors flex justify-between items-center ${
-                selectedMember?.id === member.id ? 'bg-[#141414] text-white' : 'hover:bg-gray-50'
+              className={`w-full p-4 text-left border-b border-[#115E59] last:border-0 transition-colors flex justify-between items-center ${
+                selectedMember?.id === member.id ? 'bg-[#115E59] text-white' : 'hover:bg-teal-50'
               }`}
             >
               <div>
@@ -182,7 +182,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
       <div className="lg:col-span-2 space-y-6">
         {selectedMember ? (
           <>
-            <div className="bg-white border border-[#141414] p-6 shadow-[8px_8px_0px_0px_rgba(20,20,20,1)]">
+            <div className="bg-white border border-[#115E59] p-6 shadow-[8px_8px_0px_0px_rgba(17,94,89,1)]">
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <h2 className="text-3xl font-bold font-serif italic tracking-tighter">{selectedMember.name}</h2>
@@ -216,7 +216,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
                     }));
                     setIsModalOpen(true);
                   }}
-                  className="flex items-center gap-2 bg-[#141414] text-white px-6 py-2 font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
+                  className="flex items-center gap-2 bg-[#115E59] text-white px-6 py-2 font-bold uppercase tracking-widest hover:bg-[#0D9488] transition-colors"
                 >
                   <Calculator size={18} />
                   New Reading
@@ -244,14 +244,14 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
               <div className="space-y-4">
                 {memberBills.length > 0 ? (
                   memberBills.map(bill => (
-                    <div key={bill.id} className="bg-white border border-[#141414] p-4 flex flex-col md:flex-row justify-between gap-4 relative group">
+                    <div key={bill.id} className="bg-white border border-[#115E59] p-4 flex flex-col md:flex-row justify-between gap-4 relative group">
                       {isAdmin && (
                         <div className="absolute left-4 top-4 md:static">
                           <input 
                             type="checkbox"
                             checked={selectedBills.includes(bill.id)}
                             onChange={() => toggleSelectBill(bill.id)}
-                            className="w-4 h-4 accent-[#141414]"
+                            className="w-4 h-4 accent-[#115E59]"
                           />
                         </div>
                       )}
@@ -269,7 +269,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
                         <p className="text-xs font-bold">{bill.consumption} m³</p>
                       </div>
                     </div>
-                      <div className="text-right border-t md:border-t-0 md:border-l border-[#141414] pt-4 md:pt-0 md:pl-6 flex flex-col justify-between items-end">
+                      <div className="text-right border-t md:border-t-0 md:border-l border-[#115E59] pt-4 md:pt-0 md:pl-6 flex flex-col justify-between items-end">
                         <div>
                           <p className="text-[10px] font-mono uppercase text-gray-500">Total Amount</p>
                           <p className="text-xl font-bold font-serif italic">₱{bill.totalAmount.toFixed(2)}</p>
@@ -302,7 +302,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
                     </div>
                   ))
                 ) : (
-                  <div className="bg-white border border-dashed border-[#141414] p-12 text-center">
+                  <div className="bg-white border border-dashed border-[#115E59] p-12 text-center">
                     <Receipt className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                     <p className="text-gray-500 font-mono text-sm">No billing records found for this member.</p>
                   </div>
@@ -311,7 +311,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
             </div>
           </>
         ) : (
-          <div className="h-full flex items-center justify-center bg-white border border-dashed border-[#141414] p-12 text-center">
+          <div className="h-full flex items-center justify-center bg-white border border-dashed border-[#115E59] p-12 text-center">
             <div className="max-w-xs">
               <UserPlus className="w-16 h-16 text-gray-300 mx-auto mb-6" />
               <h3 className="text-xl font-bold font-serif italic mb-2">No Member Selected</h3>
@@ -329,7 +329,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white border-2 border-[#141414] shadow-[12px_12px_0px_0px_rgba(20,20,20,1)] w-full max-w-sm p-8"
+              className="bg-white border-2 border-[#115E59] shadow-[12px_12px_0px_0px_rgba(17,94,89,1)] w-full max-w-sm p-8"
             >
               <h3 className="text-xl font-bold font-serif italic uppercase mb-4">Confirm Delete</h3>
               <p className="text-sm font-mono text-gray-600 mb-8">
@@ -338,7 +338,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
               <div className="flex gap-4">
                 <button
                   onClick={() => setConfirmDelete({ id: '', isOpen: false })}
-                  className="flex-1 border border-[#141414] py-2 font-bold uppercase tracking-widest hover:bg-gray-50 transition-colors"
+                  className="flex-1 border border-[#115E59] py-2 font-bold uppercase tracking-widest hover:bg-teal-50 transition-colors text-[#115E59]"
                 >
                   Cancel
                 </button>
@@ -359,7 +359,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white border-2 border-[#141414] shadow-[12px_12px_0px_0px_rgba(20,20,20,1)] w-full max-w-lg p-8"
+              className="bg-white border-2 border-[#115E59] shadow-[12px_12px_0px_0px_rgba(17,94,89,1)] w-full max-w-lg p-8"
             >
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-bold font-serif italic uppercase tracking-tight">New Reading</h3>
@@ -377,7 +377,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
                       type="date"
                       value={formData.readingDateStart}
                       onChange={(e) => setFormData({ ...formData, readingDateStart: e.target.value })}
-                      className="w-full p-2 border border-[#141414] font-mono text-sm focus:ring-2 focus:ring-[#141414] outline-none"
+                      className="w-full p-2 border border-[#115E59] font-mono text-sm focus:ring-2 focus:ring-[#0D9488] outline-none"
                     />
                   </div>
                   <div className="space-y-1">
@@ -387,7 +387,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
                       type="date"
                       value={formData.readingDateEnd}
                       onChange={(e) => setFormData({ ...formData, readingDateEnd: e.target.value })}
-                      className="w-full p-2 border border-[#141414] font-mono text-sm focus:ring-2 focus:ring-[#141414] outline-none"
+                      className="w-full p-2 border border-[#115E59] font-mono text-sm focus:ring-2 focus:ring-[#0D9488] outline-none"
                     />
                   </div>
                 </div>
@@ -401,7 +401,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
                       step="0.01"
                       value={isNaN(formData.previousReading) ? '' : formData.previousReading}
                       onChange={(e) => setFormData({ ...formData, previousReading: e.target.value === '' ? NaN : parseFloat(e.target.value) })}
-                      className="w-full p-2 border border-[#141414] font-mono text-sm focus:ring-2 focus:ring-[#141414] outline-none"
+                      className="w-full p-2 border border-[#115E59] font-mono text-sm focus:ring-2 focus:ring-[#0D9488] outline-none"
                     />
                   </div>
                   <div className="space-y-1">
@@ -412,7 +412,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
                       step="0.01"
                       value={isNaN(formData.currentReading) ? '' : formData.currentReading}
                       onChange={(e) => setFormData({ ...formData, currentReading: e.target.value === '' ? NaN : parseFloat(e.target.value) })}
-                      className="w-full p-2 border border-[#141414] font-mono text-sm focus:ring-2 focus:ring-[#141414] outline-none"
+                      className="w-full p-2 border border-[#115E59] font-mono text-sm focus:ring-2 focus:ring-[#0D9488] outline-none"
                     />
                   </div>
                 </div>
@@ -430,7 +430,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
                           others: type === 'Consumer' ? 10 : formData.others
                         });
                       }}
-                      className="w-full p-2 border border-[#141414] font-mono text-sm focus:ring-2 focus:ring-[#141414] outline-none bg-white"
+                      className="w-full p-2 border border-[#115E59] font-mono text-sm focus:ring-2 focus:ring-[#0D9488] outline-none bg-white"
                     >
                       <option value="Consumer">Consumer (-10)</option>
                       <option value="Others (Manual)">Others (Manual)</option>
@@ -445,14 +445,14 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
                       disabled={formData.deductionType === 'Consumer'}
                       value={isNaN(formData.others) ? '' : formData.others}
                       onChange={(e) => setFormData({ ...formData, others: e.target.value === '' ? NaN : parseFloat(e.target.value) })}
-                      className={`w-full p-2 border border-[#141414] font-mono text-sm focus:ring-2 focus:ring-[#141414] outline-none ${formData.deductionType === 'Consumer' ? 'bg-gray-50 text-gray-500' : ''}`}
+                      className={`w-full p-2 border border-[#115E59] font-mono text-sm focus:ring-2 focus:ring-[#0D9488] outline-none ${formData.deductionType === 'Consumer' ? 'bg-teal-50 text-teal-800' : ''}`}
                     />
                   </div>
                 </div>
 
                 {/* Live Calculation Preview */}
                 {settings && (
-                  <div className="bg-gray-50 border border-[#141414] p-4 font-mono text-xs space-y-2">
+                  <div className="bg-teal-50 border border-[#115E59] p-4 font-mono text-xs space-y-2">
                     <div className="flex justify-between">
                       <span>Consumption:</span>
                       <span className="font-bold">{calculateBill()?.consumption.toFixed(2)} m³</span>
@@ -486,7 +486,7 @@ export default function BillingDashboard({ isAdmin, settings }: { isAdmin: boole
 
                 <button
                   type="submit"
-                  className="w-full bg-[#141414] text-white py-3 font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors mt-6"
+                  className="w-full bg-[#115E59] text-white py-3 font-bold uppercase tracking-widest hover:bg-[#0D9488] transition-colors mt-6"
                 >
                   Generate Bill
                 </button>

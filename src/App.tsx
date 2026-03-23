@@ -79,12 +79,12 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#E4E3E0]">
+      <div className="min-h-screen flex items-center justify-center bg-[#F0FDFA]">
         <motion.div 
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         >
-          <Droplets className="w-12 h-12 text-[#141414]" />
+          <Droplets className="w-12 h-12 text-[#115E59]" />
         </motion.div>
       </div>
     );
@@ -92,13 +92,13 @@ export default function App() {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#E4E3E0] p-4">
-          <div className="max-w-md w-full bg-white border border-[#141414] p-8 shadow-[8px_8px_0px_0px_rgba(20,20,20,1)]">
+      <div className="min-h-screen flex items-center justify-center bg-[#F0FDFA] p-4">
+          <div className="max-w-md w-full bg-white border border-[#115E59] p-8 shadow-[8px_8px_0px_0px_rgba(17,94,89,1)]">
           <div className="flex items-center gap-3 mb-6">
             {settings?.companyLogo ? (
               <img src={settings.companyLogo} alt="Logo" className="w-10 h-10 object-contain" referrerPolicy="no-referrer" />
             ) : (
-              <Droplets className="w-10 h-10 text-[#141414]" />
+              <Droplets className="w-10 h-10 text-[#115E59]" />
             )}
             <h1 className="text-3xl font-bold tracking-tighter uppercase italic font-serif">
               {settings?.companyName || 'Aquaflow'}
@@ -114,7 +114,7 @@ export default function App() {
           </p>
           <button
             onClick={handleLogin}
-            className="w-full flex items-center justify-center gap-3 bg-[#141414] text-white py-4 font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
+            className="w-full flex items-center justify-center gap-3 bg-[#115E59] text-white py-4 font-bold uppercase tracking-widest hover:bg-[#0D9488] transition-colors"
           >
             <User className="w-5 h-5" />
             Sign in with Google
@@ -127,12 +127,12 @@ export default function App() {
   const isAdmin = user.email === "lobingco.juvelyn7@gmail.com";
 
   return (
-    <div className="min-h-screen bg-[#E4E3E0] flex">
+    <div className="min-h-screen bg-[#F0FDFA] flex">
       {/* Sidebar */}
       <aside 
         className={`${
           isSidebarOpen ? 'w-64' : 'w-20'
-        } bg-[#141414] text-white transition-all duration-300 flex flex-col border-r border-[#141414]`}
+        } bg-[#115E59] text-white transition-all duration-300 flex flex-col border-r border-[#115E59]`}
       >
         <div className="p-6 flex items-center justify-between">
           {isSidebarOpen && (
@@ -208,7 +208,7 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
-        <header className="bg-white border-b border-[#141414] p-6 sticky top-0 z-10">
+        <header className="bg-white border-b border-[#115E59] p-6 sticky top-0 z-10">
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold tracking-tight uppercase italic font-serif">
               {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
@@ -221,7 +221,7 @@ export default function App() {
               <img 
                 src={user.photoURL || ''} 
                 alt="Profile" 
-                className="w-10 h-10 rounded-full border border-[#141414]"
+                className="w-10 h-10 rounded-full border border-[#115E59]"
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -267,8 +267,8 @@ function NavItem({
       onClick={onClick}
       className={`w-full flex items-center gap-3 p-3 rounded transition-all ${
         active 
-          ? 'bg-white text-[#141414] shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)]' 
-          : 'text-gray-400 hover:text-white hover:bg-gray-800'
+          ? 'bg-white text-[#115E59] shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)]' 
+          : 'text-gray-400 hover:text-white hover:bg-teal-800'
       }`}
     >
       {icon}
