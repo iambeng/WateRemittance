@@ -1,0 +1,53 @@
+{
+  "entities": {
+    "Member": {
+      "title": "Member",
+      "description": "A registered water consumer.",
+      "type": "object",
+      "properties": {
+        "memberId": { "type": "string", "description": "Unique ID for the member." },
+        "name": { "type": "string", "description": "Full name of the member." },
+        "address": { "type": "string", "description": "Physical address." },
+        "lateralNumber": { "type": "string", "description": "Lateral connection number." },
+        "status": { "type": "string", "enum": ["Active", "Padlocked"], "description": "Current status of the connection." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp." }
+      },
+      "required": ["memberId", "name", "address", "lateralNumber", "status"]
+    },
+    "Bill": {
+      "title": "Bill",
+      "description": "A monthly water bill record.",
+      "type": "object",
+      "properties": {
+        "memberId": { "type": "string", "description": "ID of the member." },
+        "readingDateStart": { "type": "string", "format": "date", "description": "Start of reading period." },
+        "readingDateEnd": { "type": "string", "format": "date", "description": "End of reading period." },
+        "previousReading": { "type": "number", "description": "Previous meter reading in m3." },
+        "currentReading": { "type": "number", "description": "Current meter reading in m3." },
+        "consumption": { "type": "number", "description": "Calculated consumption in m3." },
+        "penalty": { "type": "number", "description": "Penalty amount in PHP." },
+        "monthlyDues": { "type": "number", "description": "Fixed monthly dues in PHP." },
+        "totalAmount": { "type": "number", "description": "Total bill amount in PHP." },
+        "statusTag": { "type": "string", "enum": ["Regular", "For Penalty", "For Disconnection"], "description": "Billing status based on date." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp." }
+      },
+      "required": ["memberId", "readingDateStart", "readingDateEnd", "previousReading", "currentReading", "consumption", "penalty", "monthlyDues", "totalAmount", "statusTag"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Global billing configuration.",
+      "type": "object",
+      "properties": {
+        "excessRate": { "type": "number", "description": "Rate per m3 above the minimum." },
+        "baseRate": { "type": "number", "description": "Minimum charge for 0-3 m3." },
+        "fixedDues": { "type": "number", "description": "Fixed monthly fee." }
+      },
+      "required": ["excessRate", "baseRate", "fixedDues"]
+    }
+  },
+  "firestore": {
+    "/members/{memberId}": { "schema": "Member", "description": "Member profiles." },
+    "/bills/{billId}": { "schema": "Bill", "description": "Monthly billing records." },
+    "/settings/global": { "schema": "Settings", "description": "Global billing settings." }
+  }
+}

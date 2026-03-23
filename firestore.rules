@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    // Collection: members
+    // Fields: memberId, name, address, lateralNumber, status, createdAt
+    //
+    // Collection: bills
+    // Fields: memberId, readingDateStart, readingDateEnd, previousReading, 
+    //         currentReading, consumption, penalty, monthlyDues, totalAmount, 
+    //         statusTag, createdAt
+    //
+    // Collection: settings
+    // Fields: excessRate, baseRate, fixedDues
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+             (request.auth.token.email == "lobingco.juvelyn7@gmail.com" && 
+              request.auth.token.email_verified == true);
+    }
+
+    match /members/{memberId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    match /bills/{billId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    match /settings/{settingId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}

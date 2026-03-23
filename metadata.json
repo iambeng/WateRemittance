@@ -1,0 +1,5 @@
+{
+  "name": "Aquaflow Water Billing",
+  "description": "A comprehensive water billing management system for member registration, billing history, dynamic rate calculations, and PDF receipt generation.",
+  "requestFramePermissions": []
+}
