@@ -5,6 +5,7 @@ export interface Member {
   address: string;
   lateralNumber: string;
   status: 'Active' | 'Padlocked';
+  initialReading: number;
   createdAt: string;
 }
 
@@ -19,7 +20,8 @@ export interface Bill {
   penalty: number;
   monthlyDues: number;
   others: number;
-  deductionType: 'Consumer' | 'Others (Manual)';
+  adjustment: number;
+  deductionType: 'Consumer (-10)' | 'Penalty (+20)' | 'Others (Manual)';
   totalAmount: number;
   statusTag: 'Regular' | 'For Penalty' | 'For Disconnection';
   status: 'Paid' | 'Unpaid';
@@ -33,4 +35,5 @@ export interface Settings {
   companyName?: string;
   companyLogo?: string;
   tagline?: string;
+  lateralNumbers?: string[];
 }
